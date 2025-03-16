@@ -21,7 +21,7 @@ export class AnswearService {
       const question = await this.questionRepository.findOne({ where: { id: data.questionId } });
 
       if (!question) {
-        throw new RpcException({ message: 'Question not found', status: HttpStatus.NOT_FOUND });
+        throw new RpcException({ message: 'Answear not found', status: HttpStatus.NOT_FOUND });
       }
 
       const newAnswer = this.answearRepository.create({ ...data, question: question });
@@ -29,8 +29,13 @@ export class AnswearService {
 
       return answer;
     } catch (error) {
-      console.error('Error in createAnswer:', error);
-      throw new RpcException({ message: 'Failed to create answer', status: HttpStatus.INTERNAL_SERVER_ERROR });
+      if (error instanceof RpcException) {
+        throw error;
+      }
+      throw new RpcException({
+        status: HttpStatus.INTERNAL_SERVER_ERROR,
+        message: "Failed to create answear",
+      });
     }
   }
 

@@ -45,8 +45,13 @@ export class QuestionService {
 
       return response;
     } catch (error) {
-      console.error('Error in getQuestion:', error);
-      throw new RpcException({ message: 'Failed to fetch question', status: HttpStatus.INTERNAL_SERVER_ERROR });
+      if (error instanceof RpcException) {
+        throw error;
+      }
+      throw new RpcException({
+        status: HttpStatus.INTERNAL_SERVER_ERROR,
+        message: "Failed to fetch questions",
+      });
     }
   }
 
@@ -69,6 +74,11 @@ export class QuestionService {
         .orderBy('nrOfPositiveVotes', 'DESC')
         .getRawMany();
 
+
+      if (questions.length <= 0) {
+        throw new RpcException({ message: 'we have no questions', status: HttpStatus.NOT_FOUND });
+      }
+
       return questions.map(question => ({
         id: question.question_id,
         title: question.question_title,
@@ -81,8 +91,13 @@ export class QuestionService {
         nrOfAnswers: +question.nrOfAnswers, // Include the number of answers
       }));
     } catch (error) {
-      console.error('Error in getAllQuestions:', error);
-      throw new RpcException({ message: 'Failed to fetch questions', status: HttpStatus.INTERNAL_SERVER_ERROR });
+      if (error instanceof RpcException) {
+        throw error;
+      }
+      throw new RpcException({
+        status: HttpStatus.INTERNAL_SERVER_ERROR,
+        message: "Faield to fetch questions",
+      });
     }
   }
 

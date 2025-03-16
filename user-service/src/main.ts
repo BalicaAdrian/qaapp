@@ -12,6 +12,7 @@ async function bootstrap() {
       port: 3001, // Choose a port for the user service
     },
   });
+
   app.listen();
 }
 bootstrap();

@@ -3,10 +3,13 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UserModule } from './user/user.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { ConfigModule } from '@nestjs/config';
 
-console.log("test", process.env.DB_HOST)
 @Module({
   imports: [
+     ConfigModule.forRoot({
+      isGlobal: true,
+    }),
     TypeOrmModule.forRoot({
       type: 'mysql',
       host: process.env.DB_HOST || 'localhost', // Use environment variables
@@ -18,6 +21,7 @@ console.log("test", process.env.DB_HOST)
       synchronize: true, // Auto-create schema in dev
     }),
     UserModule,
+   
   ],
   controllers: [AppController],
   providers: [AppService],

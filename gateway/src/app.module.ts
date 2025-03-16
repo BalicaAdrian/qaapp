@@ -3,6 +3,10 @@ import { ClientsModule, Transport } from '@nestjs/microservices';
 import { UserController } from './user/user.controller';
 import { QuestionController } from './question/question.controller';
 import { ResponseFactory } from './factories/responseFactory';
+import { AuthModule } from './authentification/auth.module';
+import { PassportModule } from '@nestjs/passport';
+
+
 
 @Module({
   imports: [
@@ -17,6 +21,8 @@ import { ResponseFactory } from './factories/responseFactory';
         },
       },
     ]),
+    AuthModule,
+    PassportModule.register({ session: true }),
   ],
   controllers: [UserController, QuestionController],
   providers: [ResponseFactory],

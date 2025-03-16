@@ -6,7 +6,7 @@ export class AppService {
   public  handleMicroserviceRequest<T>(observable: Observable<T>, errorMessage: string): Promise<T | any> {
     return firstValueFrom(observable.pipe(
       catchError(err => {
-        // Return an error object
+        console.log("erroare", err, err.response)
         return of({
           status: err.status || HttpStatus.INTERNAL_SERVER_ERROR,
           message: err.message || 'Internal Server Error',

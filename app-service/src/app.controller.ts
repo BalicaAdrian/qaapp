@@ -64,11 +64,20 @@ export class AppController {
     );
   }
 
-  @MessagePattern({ cmd: 'get_user' })
-  async getUser(data: UserInterface): Promise<UserInterface> {
+  @MessagePattern({ cmd: 'get_user_by_email' })
+  async getUserByEmail(data: UserInterface): Promise<UserInterface> {
     return this.appSerivice.handleMicroserviceRequest(
-      this.userServiceClient.send({ cmd: 'get_user' }, data),
-      'getUser'
+      this.userServiceClient.send({ cmd: 'get_user_by_email' }, data),
+      'getUserByEmail'
+    );
+  } 
+
+  @MessagePattern({ cmd: 'get_user_by_id' })
+  async getUserById(data: UserInterface): Promise<UserInterface> {
+
+    return this.appSerivice.handleMicroserviceRequest(
+      this.userServiceClient.send({ cmd: 'get_user_by_id' }, data),
+      'getUserById'
     );
   }
 
@@ -82,7 +91,6 @@ export class AppController {
 
   @MessagePattern({ cmd: 'app_metrics' })
   async appMetrics(data: any): Promise<MetricsInterface> {
-    console.log("info2")
 
     let userServiceMetrics = await this.appSerivice.handleMicroserviceRequest(
       this.userServiceClient.send({ cmd: 'get_total_users' }, data),

@@ -10,7 +10,7 @@ catch(exception: any, host: ArgumentsHost) {
   let message = 'Internal Server Error';
   let errorName = 'InternalServerError';
 
-  console.log(exception)
+  console.log("exception", exception)
   if (exception instanceof RpcException) {
     const rpcError = exception.getError() as { message: string; status: number };
     message = rpcError.message;

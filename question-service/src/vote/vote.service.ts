@@ -29,7 +29,6 @@ export class VoteService {
             const existingVote = await this.voteRepository.findOne({
                 where: { userId: data.userId, question: { id: data.questionId } },
             });
-            console.log("eisting", existingVote, data)
             if (existingVote) {
                 existingVote.isUpVote = data.isUpVote;
                 vote = await this.voteRepository.save(existingVote);
@@ -48,16 +47,19 @@ export class VoteService {
             return result
 
         } catch (error) {
-            console.error('Error in voteQuestion:', error);
-            throw new RpcException({ message: `Failed to vote question`, status: HttpStatus.INTERNAL_SERVER_ERROR });
+            if (error instanceof RpcException) {
+                throw error;
+              }
+              throw new RpcException({
+                status: HttpStatus.INTERNAL_SERVER_ERROR,
+                message: "Failed to vote questions",
+              });
         }
     }
 
     async voteAnswear(data: VoteInterface): Promise<Vote> {
         try {
-            console.log("Aici")
             const answer = await this.answearRepository.findOne({ where: { id: data.answearId } });
-            console.log("Aici", answer)
 
             let vote;
             if (!answer) {
@@ -86,8 +88,13 @@ export class VoteService {
             return result;
 
         } catch (error) {
-            console.error('Error in voteAnswer:', error);
-            throw new RpcException({ message: `Failed to vote answer`, status: HttpStatus.INTERNAL_SERVER_ERROR });
+            if (error instanceof RpcException) {
+                throw error;
+              }
+              throw new RpcException({
+                status: HttpStatus.INTERNAL_SERVER_ERROR,
+                message: "Faield to vote answear",
+              });
         }
     }
 
