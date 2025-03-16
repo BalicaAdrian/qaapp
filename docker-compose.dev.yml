@@ -1,0 +1,65 @@
+version: "3.8"
+services:
+  user-db-dev:
+    image: mariadb:10.6
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: user_db
+    ports:
+      - "3309:3306"  # Different host port
+    volumes:
+      - user_db_data_dev:/var/lib/mysql
+    networks:
+      - dev-network
+
+  question-db-dev:
+    image: mariadb:10.6
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: question_db
+    ports:
+      - "3310:3306"  # Different host port
+    volumes:
+      - question_db_data_dev:/var/lib/mysql
+    networks:
+      - dev-network
+
+  phpmyadmin-user-dev:
+    image: phpmyadmin/phpmyadmin
+    ports:
+      - "8083:80"  # Different host port
+    environment:
+      PMA_HOST: user-db-dev
+      PMA_PORT: 3306
+      PMA_USER: root
+      PMA_PASSWORD: password
+      MYSQL_ROOT_PASSWORD: password
+    networks:
+      - dev-network
+    depends_on:
+      - user-db-dev
+
+  phpmyadmin-question-dev:
+    image: phpmyadmin/phpmyadmin
+    ports:
+      - "8084:80"  # Different host port
+    environment:
+      PMA_HOST: question-db-dev
+      PMA_PORT: 3306
+      PMA_USER: root
+      PMA_PASSWORD: password
+      MYSQL_ROOT_PASSWORD: password
+    networks:
+      - dev-network
+    depends_on:
+      - question-db-dev
+
+networks:
+  dev-network:
+    driver: bridge
+
+volumes:
+  user_db_data_dev:
+  question_db_data_dev:
