@@ -17,24 +17,26 @@ export class AuthService {
 
     async register(registerDto: RegisterDto) {
         const { email, password, name } = registerDto;
+        console.log("dwadaw");
 
-        // Check if user exists
         const result = await firstValueFrom(
             this.appServiceClient.send({ cmd: 'get_user_by_email' }, { email }),
         );
+        console.log("result", result);
         if (result.id) {
             throw new BadRequestException('User already exists');
         }
-
-        // Hash password
+        console.log("eaddcea")
         const hashedPassword = await bcrypt.hash(password, 10);
 
         const newUser = await firstValueFrom(
             this.appServiceClient.send({ cmd: 'create_user' }, { ...registerDto, password: hashedPassword }),
         );
 
-        // Generate token
-        const token = await jwt.sign({ id: newUser.id }, 'SECRET', {});
+        console.log("user create ", newUser)
+        const secret = process.env.SECRET_JWT_KEY as string;
+        console.log("SECA", secret)
+        const token = jwt.sign({ id: newUser.id }, secret, {});
 
         return {
             user: {
@@ -52,7 +54,7 @@ export class AuthService {
         const user = await firstValueFrom(
             this.appServiceClient.send({ cmd: 'get_user_by_email' }, { email: userDto.email }),
         );
-
+        console.log("user dwad ", user)
         if (user.status === HttpStatus.NOT_FOUND) {
             throw new NotFoundException('User not found');
         }
@@ -63,7 +65,7 @@ export class AuthService {
             throw new BadRequestException('Wrong password');
         }
 
-        const token = await jwt.sign({ id: user.id }, 'secret', {});
+        const token = await jwt.sign({ id: user.id }, process.env.SECRET_JWT_KEY as string, {});
 
         return {
             user: user,

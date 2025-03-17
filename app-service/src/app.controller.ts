@@ -47,7 +47,7 @@ export class AppController implements OnModuleInit {
   async createQuestion(data: QuestionInterface): Promise<QuestionInterface> {
 
     await this.redisClient.del("get_all_questions");
-
+    console.log('data', data)
     const result = await this.appSerivice.handleMicroserviceRequest(
       this.questionServiceClient.send({ cmd: 'create_question' }, data),
       'createQuestion'

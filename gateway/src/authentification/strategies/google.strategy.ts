@@ -11,8 +11,8 @@
 
 //     ) {
 //         super({
-//             clientID: "441719029462-bsglp0leuat11k4mesomto5tgmrjg5gh.apps.googleusercontent.com",
-//             clientSecret: "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",
+//             clientID: process.env.CLIENT_ID,
+//             clientSecret: process.env.CLIENT_SECRET,
 //             callbackURL: 'http://localhost:8080/auth/google/redirect',
 //             scope: ['email', 'profile', 'openid'],
 //             accessType: 'offline',

@@ -105,6 +105,7 @@ export class QuestionService {
     try {
       const newQuestion = this.questionRepository.create(data);
       const question = await this.questionRepository.save(newQuestion);
+      console.log("data", data, question)
       return question;
     } catch (error) {
       console.error('Error in createQuestion:', error);

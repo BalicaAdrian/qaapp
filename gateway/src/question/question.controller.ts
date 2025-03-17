@@ -54,13 +54,13 @@ export class QuestionController {
   
   @UseGuards(AuthGuard)
   @Post()
-  @UsePipes(new ValidationPipe())
   async createQuestion(
     @Body() createQuestionDto: CreateQuestionDto,
     @Res() res: Response,
     @Req() req: Request
   ) {
     const userId =  req["user"].id;
+    console.log("d", userId)
     const question: QuestionInterface = await firstValueFrom(
       this.appServiceClient.send({ cmd: 'create_question' }, { ...createQuestionDto, userId: userId }),
     );

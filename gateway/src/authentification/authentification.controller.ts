@@ -65,8 +65,8 @@ export class AuthController {
   //   // try {
   //   //   const { tokens } = await this.oauth2Client.getToken({
   //   //     code: code,
-  //   //     client_id: "441719029462-bsglp0leuat11k4mesomto5tgmrjg5gh.apps.googleusercontent.com",
-  //   //     // client_secret: "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",
+  //   //     client_id: process.env.CLIENT_ID,
+  //   //     // client_secret: process.env.CLIENT_SECRET,
   //   //     redirect_uri: 'http://localhost:8080/auth/google/redirect',
   //   //     // grant_type: 'authorization_code'
   //   //     });

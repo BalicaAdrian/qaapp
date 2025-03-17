@@ -29,7 +29,7 @@ import { JwtModule } from '@nestjs/jwt';
     // PassportModule.register({ session: true }), /google bug
     JwtModule.register({
       global: true,
-      secret: "SECRET",
+      secret: process.env.SECRET_JWT_KEY,
       signOptions: { expiresIn: '2h' },
     }),
 
