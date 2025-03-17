@@ -15,8 +15,8 @@ import { PassportModule } from '@nestjs/passport';
         name: 'APP_SERVICE',
         transport: Transport.TCP,
         options: {
-          // host: 'app-service', //docker
-          host: 'localhost', //docker
+          host: 'app-service', //docker
+          // host: 'localhost', //docker
           port: 3000,
         },
       },

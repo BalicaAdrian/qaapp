@@ -3,7 +3,7 @@ services:
   user-service:
     build:
       context: ./user-service
-      dockerfile: Dockerfile  # Assuming Dockerfile is in the user-service directory
+      dockerfile: Dockerfile # Assuming Dockerfile is in the user-service directory
     ports:
       - "3001:3001"
     networks:
@@ -41,6 +41,7 @@ services:
     depends_on:
       - user-service
       - question-service
+      - redis
     networks:
       - qaapp-network
     environment:
@@ -49,6 +50,8 @@ services:
       USER_SERVICE_PORT: 3001
       QUESTION_SERVICE_HOST: question-service
       QUESTION_SERVICE_PORT: 3002
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
 
   gateway:
     build:
@@ -94,13 +97,13 @@ services:
   phpmyadmin-user:
     image: phpmyadmin/phpmyadmin
     ports:
-      - "8081:80"  # Access phpMyAdmin for user-db on port 8081
+      - "8081:80" # Access phpMyAdmin for user-db on port 8081
     environment:
       PMA_HOST: user-db
       PMA_PORT: 3306
       PMA_USER: root
       PMA_PASSWORD: password
-      MYSQL_ROOT_PASSWORD: password # Add this line
+      MYSQL_ROOT_PASSWORD: password
     networks:
       - qaapp-network
     depends_on:
@@ -109,18 +112,39 @@ services:
   phpmyadmin-question:
     image: phpmyadmin/phpmyadmin
     ports:
-      - "8082:80"  # Access phpMyAdmin for question-db on port 8082
+      - "8082:80" # Access phpMyAdmin for question-db on port 8082
     environment:
       PMA_HOST: question-db
       PMA_PORT: 3306
       PMA_USER: root
       PMA_PASSWORD: password
-      MYSQL_ROOT_PASSWORD: password # Add this line
+      MYSQL_ROOT_PASSWORD: password
     networks:
       - qaapp-network
     depends_on:
       - question-db
-      
+
+  redis:
+    image: redis:6.2-alpine
+    ports:
+      - "6379:6379"
+    networks:
+      - qaapp-network
+    volumes:
+      - redis_data:/data
+    command: redis-server --appendonly yes # Enable persistence
+
+  redis-commander:
+    image: rediscommander/redis-commander:latest
+    ports:
+      - "8085:8081" # Access Redis Commander on port 8083
+    networks:
+      - qaapp-network
+    environment:
+      - REDIS_HOSTS=local:redis:6379
+    depends_on:
+      - redis
+
 networks:
   qaapp-network:
     driver: bridge
@@ -128,3 +152,4 @@ networks:
 volumes:
   user_db_data:
   question_db_data:
+  redis_data:

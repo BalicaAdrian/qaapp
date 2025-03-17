@@ -56,6 +56,27 @@ services:
     depends_on:
       - question-db-dev
 
+  redis-dev:
+    image: redis:6.2-alpine
+    ports:
+      - "6379:6379"  # This is crucial - maps Redis to localhost:6379
+    volumes:
+      - redis_data_dev:/data
+    command: redis-server --appendonly yes
+    networks:
+      - dev-network
+
+  redis-commander:
+    image: rediscommander/redis-commander
+    ports:
+      - "8085:8081"
+    environment:
+      - REDIS_HOSTS=local:redis-dev:6379
+    networks:
+      - dev-network
+    depends_on:
+      - redis-dev
+
 networks:
   dev-network:
     driver: bridge
@@ -63,3 +84,4 @@ networks:
 volumes:
   user_db_data_dev:
   question_db_data_dev:
+  redis_data_dev:

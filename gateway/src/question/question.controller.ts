@@ -20,7 +20,7 @@ export class QuestionController {
     private readonly responseFactory: ResponseFactory,
   ) { }
 
-  @UseGuards(IsAuthenticated)
+  // @UseGuards(IsAuthenticated)
   @Get('/metrics')
   async appMetrics(@Res() res: Response) {
     const metrics: any[] = await firstValueFrom(
@@ -29,7 +29,7 @@ export class QuestionController {
     return this.responseFactory.handleResponse(metrics, res);
   }
 
-  @UseGuards(IsAuthenticated)
+  // @UseGuards(IsAuthenticated)
   @Get(':id')
   async getQuestion(@Param('id') id: string, @Res() res: Response) {
     const question: QuestionInterface = await firstValueFrom(
@@ -38,7 +38,7 @@ export class QuestionController {
     return this.responseFactory.handleResponse(question, res);
   }
 
-  @UseGuards(IsAuthenticated)
+  // @UseGuards(IsAuthenticated)
   @Get('')
   async getAllQuestion(@Res() res: Response) {
     const question: QuestionInterface[] = await firstValueFrom(
@@ -47,7 +47,7 @@ export class QuestionController {
     return this.responseFactory.handleResponse(question, res);
   }
 
-  @UseGuards(IsAuthenticated)
+  // @UseGuards(IsAuthenticated)
   @Post()
   @UsePipes(new ValidationPipe())
   async createQuestion(
@@ -55,14 +55,14 @@ export class QuestionController {
     @Res() res: Response,
     @Req() req: Request
   ) {
-    const userId = req["user"].id;
+    const userId = "user";
     const question: QuestionInterface = await firstValueFrom(
       this.appServiceClient.send({ cmd: 'create_question' }, { ...createQuestionDto, userId: userId }),
     );
     return this.responseFactory.handleResponse(question, res);
   }
 
-  @UseGuards(IsAuthenticated)
+  // @UseGuards(IsAuthenticated)
   @Post(':id/answers')
   @UsePipes(new ValidationPipe())
   async createAnswear(
@@ -71,7 +71,7 @@ export class QuestionController {
     @Req() req: Request,
     @Res() res: Response,
   ) {
-    const userId = req["user"];
+    const userId = "user";
     const answear: AnswearInterface = await firstValueFrom(
       this.appServiceClient.send(
         { cmd: 'create_answear' },
@@ -81,7 +81,7 @@ export class QuestionController {
     return this.responseFactory.handleResponse(answear, res);
   }
 
-  @UseGuards(IsAuthenticated)
+  // @UseGuards(IsAuthenticated)
   @Post('vote/question/:id')
   async voteQuestion(
     @Param('id') id: string,
@@ -89,14 +89,14 @@ export class QuestionController {
     @Req() req: Request,
     @Res() res: Response) {
 
-    const userId = req["user"];
+    const userId = "user";
     const vote: VoteInterface = await firstValueFrom(
       this.appServiceClient.send({ cmd: 'vote_question' }, { ...createVoteDto, questionId: id, userId: userId }),
     );
     return this.responseFactory.handleResponse(vote, res);
   }
 
-  @UseGuards(IsAuthenticated)
+  // @UseGuards(IsAuthenticated)
   @Post('vote/answear/:id')
   async voteAsnwear(
     @Param('id') id: string,
@@ -104,9 +104,9 @@ export class QuestionController {
     @Req() req: Request,
     @Res() res: Response) {
 
-    const userId = req["user"];
+    const userId = "user";
     const vote: VoteInterface = await firstValueFrom(
-      this.appServiceClient.send({ cmd: 'vote_asnwear' }, { ...createVoteDto, questionId: id, userId: userId }),
+      this.appServiceClient.send({ cmd: 'vote_asnwear' }, { ...createVoteDto, answearId: id, userId: userId }),
     );
     return this.responseFactory.handleResponse(vote, res);
   }

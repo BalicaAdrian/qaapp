@@ -40,6 +40,7 @@ export class VoteService {
             await this.questionRepository.save(question);
 
             const result = await this.voteRepository.findOne({ where: { id: vote.id }, relations: { question: true } });
+           
 
             if (!result)
                 throw new RpcException({ message: 'Vote not found', status: HttpStatus.NOT_FOUND });
@@ -58,9 +59,11 @@ export class VoteService {
     }
 
     async voteAnswear(data: VoteInterface): Promise<Vote> {
-        try {
-            const answer = await this.answearRepository.findOne({ where: { id: data.answearId } });
+        try {   
+            console.log(data);
 
+            const answer = await this.answearRepository.findOne({ where: { id: data.answearId } });
+            console.log(answer);
             let vote;
             if (!answer) {
                 throw new RpcException({ message: 'Answer not found', status: HttpStatus.NOT_FOUND });

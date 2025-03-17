@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { AuthController } from './authentification.controller';
-import { GoogleStrategy } from 'src/authentification/strategies/google.strategy';
+// import { GoogleStrategy } from 'src/authentification/strategies/google.strategy';
 import { SessionSerializer } from './utils/serializer';
 import { AuthService } from './authenfitication.service';
 import { ClientsModule, Transport } from '@nestjs/microservices';
@@ -21,7 +21,7 @@ import { ClientsModule, Transport } from '@nestjs/microservices';
         ]),],
     controllers: [AuthController],
     providers: [
-        GoogleStrategy,
+        // GoogleStrategy,
         SessionSerializer,
         AuthService
     ],

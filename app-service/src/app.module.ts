@@ -5,6 +5,7 @@ import { APP_FILTER } from '@nestjs/core';
 import { AllExceptionsFilter } from './filters/exception.filter';
 import { AppService } from './app.service';
 
+
 @Module({
   imports: [
     ClientsModule.register([
@@ -12,8 +13,8 @@ import { AppService } from './app.service';
         name: 'USER_SERVICE',
         transport: Transport.TCP,
         options: {
-          // host: 'user-service', // Use the service name from docker-compose 
-          host: 'localhost', //locally
+          host: 'user-service', // Use the service name from docker-compose 
+          // host: 'localhost', //locally
           port: 3001,
         },
       },
@@ -21,12 +22,12 @@ import { AppService } from './app.service';
         name: 'QUESTION_SERVICE',
         transport: Transport.TCP,
         options: {
-          // host: 'question-service', // Use the service name from docker-compose
-           host: 'localhost', //locally
+          host: 'question-service', // Use the service name from docker-compose
+          // host: 'localhost', //locally
           port: 3002,
         },
       },
-    ]),
+    ])
   ],
   controllers: [AppController],
   providers: [
@@ -37,4 +38,4 @@ import { AppService } from './app.service';
     AppService
   ],
 })
-export class AppModule {}
+export class AppModule { }
