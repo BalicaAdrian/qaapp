@@ -1,9 +1,10 @@
 import { Module } from '@nestjs/common';
 import { AuthController } from './authentification.controller';
-// import { GoogleStrategy } from 'src/authentification/strategies/google.strategy';
+//import { GoogleStrategy } from 'src/authentification/strategies/google.strategy'; //google bug
 import { SessionSerializer } from './utils/serializer';
 import { AuthService } from './authenfitication.service';
 import { ClientsModule, Transport } from '@nestjs/microservices';
+import { ResponseFactory } from 'src/factories/responseFactory';
 
 
 @Module({
@@ -21,9 +22,10 @@ import { ClientsModule, Transport } from '@nestjs/microservices';
         ]),],
     controllers: [AuthController],
     providers: [
-        // GoogleStrategy,
+        //GoogleStrategy, //google bug
         SessionSerializer,
-        AuthService
+        AuthService,
+        ResponseFactory
     ],
 })
 export class AuthModule { }

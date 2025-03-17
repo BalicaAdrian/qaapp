@@ -12,6 +12,6 @@ COPY . .
 
 EXPOSE 3000
 
-EXPOSE 3001
+EXPOSE 3005
 
 CMD ["npm", "run", "start:dev"]

@@ -8,11 +8,14 @@ import { QuestionInterface } from './interfaces/questionInterface.dto';
 import { CreateAnswerDto } from './dtos/createNaswearDto';
 import { CreateVoteDto } from './dtos/voteDto.dto';
 import { VoteInterface } from './interfaces/voteInterface.interface';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { AnswearInterface } from './interfaces/answearInterface.dto';
-import { IsAuthenticated } from 'src/authentification/guards/auth.guard';
+// import { GoogleTokenGuard } from 'src/authentification/guards/auth.guard';
+import { AuthGuard } from 'src/authentification/guards/auth-jwt.guard';
+// import { IsAuthenticated } from 'src/authentification/guards/auth.guard';
 
 @ApiTags("QA app logic")
+@ApiBearerAuth()
 @Controller('question-service')
 export class QuestionController {
   constructor(
@@ -20,7 +23,7 @@ export class QuestionController {
     private readonly responseFactory: ResponseFactory,
   ) { }
 
-  // @UseGuards(IsAuthenticated)
+  @UseGuards(AuthGuard)
   @Get('/metrics')
   async appMetrics(@Res() res: Response) {
     const metrics: any[] = await firstValueFrom(
@@ -29,25 +32,27 @@ export class QuestionController {
     return this.responseFactory.handleResponse(metrics, res);
   }
 
-  // @UseGuards(IsAuthenticated)
+  @UseGuards(AuthGuard)
   @Get(':id')
   async getQuestion(@Param('id') id: string, @Res() res: Response) {
+  
     const question: QuestionInterface = await firstValueFrom(
       this.appServiceClient.send({ cmd: 'get_question' }, { questionId: id }),
     );
     return this.responseFactory.handleResponse(question, res);
   }
 
-  // @UseGuards(IsAuthenticated)
+  @UseGuards(AuthGuard)
   @Get('')
-  async getAllQuestion(@Res() res: Response) {
+  async getAllQuestion(@Res() res: Response, @Req() req: Request) {
     const question: QuestionInterface[] = await firstValueFrom(
       this.appServiceClient.send({ cmd: 'get_all_questions' }, {}),
     );
     return this.responseFactory.handleResponse(question, res);
   }
 
-  // @UseGuards(IsAuthenticated)
+  
+  @UseGuards(AuthGuard)
   @Post()
   @UsePipes(new ValidationPipe())
   async createQuestion(
@@ -55,23 +60,22 @@ export class QuestionController {
     @Res() res: Response,
     @Req() req: Request
   ) {
-    const userId = "user";
+    const userId =  req["user"].id;
     const question: QuestionInterface = await firstValueFrom(
       this.appServiceClient.send({ cmd: 'create_question' }, { ...createQuestionDto, userId: userId }),
     );
     return this.responseFactory.handleResponse(question, res);
   }
 
-  // @UseGuards(IsAuthenticated)
+  @UseGuards(AuthGuard)
   @Post(':id/answers')
-  @UsePipes(new ValidationPipe())
   async createAnswear(
     @Param('id') questionId: string,
     @Body() createAnswerDto: CreateAnswerDto,
     @Req() req: Request,
     @Res() res: Response,
   ) {
-    const userId = "user";
+    const userId =  req["user"].id;
     const answear: AnswearInterface = await firstValueFrom(
       this.appServiceClient.send(
         { cmd: 'create_answear' },
@@ -81,22 +85,23 @@ export class QuestionController {
     return this.responseFactory.handleResponse(answear, res);
   }
 
-  // @UseGuards(IsAuthenticated)
+  @UseGuards(AuthGuard)
   @Post('vote/question/:id')
   async voteQuestion(
     @Param('id') id: string,
     @Body() createVoteDto: CreateVoteDto,
     @Req() req: Request,
     @Res() res: Response) {
-
-    const userId = "user";
+    
+    const userId =  req["user"].id;
     const vote: VoteInterface = await firstValueFrom(
       this.appServiceClient.send({ cmd: 'vote_question' }, { ...createVoteDto, questionId: id, userId: userId }),
     );
     return this.responseFactory.handleResponse(vote, res);
   }
 
-  // @UseGuards(IsAuthenticated)
+  
+  @UseGuards(AuthGuard)
   @Post('vote/answear/:id')
   async voteAsnwear(
     @Param('id') id: string,
@@ -104,7 +109,7 @@ export class QuestionController {
     @Req() req: Request,
     @Res() res: Response) {
 
-    const userId = "user";
+    const userId =  req["user"].id;
     const vote: VoteInterface = await firstValueFrom(
       this.appServiceClient.send({ cmd: 'vote_asnwear' }, { ...createVoteDto, answearId: id, userId: userId }),
     );

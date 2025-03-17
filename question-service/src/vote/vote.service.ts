@@ -60,10 +60,7 @@ export class VoteService {
 
     async voteAnswear(data: VoteInterface): Promise<Vote> {
         try {   
-            console.log(data);
-
             const answer = await this.answearRepository.findOne({ where: { id: data.answearId } });
-            console.log(answer);
             let vote;
             if (!answer) {
                 throw new RpcException({ message: 'Answer not found', status: HttpStatus.NOT_FOUND });

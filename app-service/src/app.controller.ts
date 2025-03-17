@@ -72,7 +72,6 @@ export class AppController implements OnModuleInit {
       'getAllQuestions'
     );
 
-
     await this.redisClient.set("get_all_questions", JSON.stringify(result), { EX: 1000000 });
 
     return result;

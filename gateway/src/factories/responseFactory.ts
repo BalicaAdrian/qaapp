@@ -39,7 +39,7 @@ export class ResponseFactory {
             errorName = 'NotFound';
         } else if (data.status === HttpStatus.BAD_REQUEST) {
             status = HttpStatus.BAD_REQUEST;
-            message = 'Request failed - Bad Request';
+            message = data.message ? data.message : 'Request failed - Bad Request';
             errorName = 'BadRequest';
         } else if (data.status === HttpStatus.UNAUTHORIZED) {
             status = HttpStatus.UNAUTHORIZED;

@@ -11,6 +11,9 @@ export class User {
     @Column({ unique: true, length: 255 })
     email: string;
 
+    @Column()
+    password: string;
+
     @Column({ length: 255, nullable: true })
     oauthId?: string;
 }

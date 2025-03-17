@@ -2,8 +2,8 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 // import { ValidationPipe } from '@nestjs/common';
-// import * as session from 'express-session';
-import * as passport from 'passport';
+// import * as session from 'express-session'; //google bug
+// import * as passport from 'passport'; //google bug
 import { config } from 'dotenv';
 config();
 
@@ -19,20 +19,22 @@ async function bootstrap() {
   });
 
   const config = new DocumentBuilder()
-    .setTitle('PetID')
-    .setDescription('The PetID API description')
+    .setTitle('QAAP')
+    .setDescription('The QAAP API description')
     .setVersion('1.0')
     .addBearerAuth()
-    .addTag('PetID')
+    .addTag('QAAPP')
     .build();
   const document = SwaggerModule.createDocument(app, config);
 
 
   // app.useGlobalPipes(new ValidationPipe()); // Add ValidationPipe
   SwaggerModule.setup('api', app, document);
+
+  //google bug
   // app.use(
   //   session({
-  //     secret: process.env.SESSION_SECRET,
+  //     secret: "adwdawda",
   //     saveUninitialized: false,
   //     resave: false,
   //     cookie: {

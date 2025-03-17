@@ -11,15 +11,18 @@
 
 //     ) {
 //         super({
-//             clientID: process.env.GOOGLE_CLIENT_ID,
-//             clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+//             clientID: "441719029462-bsglp0leuat11k4mesomto5tgmrjg5gh.apps.googleusercontent.com",
+//             clientSecret: "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",
 //             callbackURL: 'http://localhost:8080/auth/google/redirect',
-//             scope: ['profile', 'email'],
+//             scope: ['email', 'profile', 'openid'],
+//             accessType: 'offline',
+//             prompt: 'consent', 
+//             state: true
 //         });
 //     }
 
 //     async validate(accessToken: string, refreshToken: string, profile: Profile) {
-//         const user = await this.authService.checkUser({
+//         const user = await this.authService.validateUser({
 //             email: profile.emails[0].value,
 //             name: profile.displayName,
 //         });

@@ -1,7 +1,7 @@
 import { WebSocketGateway, WebSocketServer, SubscribeMessage, OnGatewayConnection, OnGatewayDisconnect } from '@nestjs/websockets';
 import * as WebSocket from 'ws';
 
-@WebSocketGateway(3001)
+@WebSocketGateway(3005)
 export class QuestionsGateway implements OnGatewayConnection, OnGatewayDisconnect {
     @WebSocketServer()
     server: WebSocket.Server;
