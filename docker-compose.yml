@@ -37,7 +37,8 @@ services:
       context: ./app-service
       dockerfile: Dockerfile # Assuming Dockerfile is in the app-service directory
     ports:
-      - "3000:3000"
+      - "3000:3000"  # TCP Microservice port
+      - "3001:3001"  # WebSocket port
     depends_on:
       - user-service
       - question-service

@@ -7,6 +7,7 @@ import { UserInterface } from './interfaces/userInterface.interface';
 import { AppService } from './app.service';
 import { MetricsInterface } from './interfaces/metricsInterface.interface';
 import { createClient } from 'redis';
+import { QuestionsGateway } from './gateway/questions.gateway';
 @Controller()
 
 export class AppController implements OnModuleInit {
@@ -15,6 +16,8 @@ export class AppController implements OnModuleInit {
     @Inject('USER_SERVICE') private readonly userServiceClient: ClientProxy,
     @Inject('QUESTION_SERVICE') private readonly questionServiceClient: ClientProxy,
     private readonly appSerivice: AppService,
+    private readonly questionsGateway: QuestionsGateway
+
   ) { }
 
   async onModuleInit() {
@@ -45,10 +48,14 @@ export class AppController implements OnModuleInit {
 
     await this.redisClient.del("get_all_questions");
 
-    return this.appSerivice.handleMicroserviceRequest(
+    const result = await this.appSerivice.handleMicroserviceRequest(
       this.questionServiceClient.send({ cmd: 'create_question' }, data),
       'createQuestion'
     );
+
+    this.questionsGateway.broadcast('newQuestion', result);
+
+    return result;
   }
 
   @MessagePattern({ cmd: 'get_all_questions' })
@@ -57,7 +64,6 @@ export class AppController implements OnModuleInit {
     const cachedQuestions = await this.redisClient.get("get_all_questions");
 
     if (cachedQuestions) {
-      console.log("din CAHCE")
       return JSON.parse(cachedQuestions);
     }
 
@@ -65,7 +71,7 @@ export class AppController implements OnModuleInit {
       this.questionServiceClient.send({ cmd: 'get_all_questions' }, {}),
       'getAllQuestions'
     );
-    console.log("res", result)
+
 
     await this.redisClient.set("get_all_questions", JSON.stringify(result), { EX: 1000000 });
 
@@ -77,30 +83,50 @@ export class AppController implements OnModuleInit {
   async createAnswear(data: AnswearInterface): Promise<AnswearInterface> {
     await this.redisClient.del("get_all_questions");
 
-    return this.appSerivice.handleMicroserviceRequest(
+    const result = await this.appSerivice.handleMicroserviceRequest(
       this.questionServiceClient.send({ cmd: 'create_answear' }, data),
       'createAnswear'
     );
+  
+    this.questionsGateway.broadcast('newAnswer', {
+      questionId: data.questionId,
+      answer: result
+    });
+  
+    return result;
   }
 
   @MessagePattern({ cmd: 'vote_question' })
   async voteQuestion(data: VoteInterface): Promise<VoteInterface> {
     await this.redisClient.del("get_all_questions");
 
-    return this.appSerivice.handleMicroserviceRequest(
+    const result = await this.appSerivice.handleMicroserviceRequest(
       this.questionServiceClient.send({ cmd: 'vote_question' }, data),
       'voteQuestion'
     );
+  
+    this.questionsGateway.broadcast('questionVoted', {
+      questionId: data.questionId,
+      vote: result
+    });
+  
+    return result;
   }
 
   @MessagePattern({ cmd: 'vote_asnwear' })
   async voteAsnwear(data: VoteInterface): Promise<VoteInterface> {
-    await this.redisClient.del("get_all_questions");
 
-    return this.appSerivice.handleMicroserviceRequest(
+    const result = await this.appSerivice.handleMicroserviceRequest(
       this.questionServiceClient.send({ cmd: 'vote_asnwear' }, data),
       'voteAsnwear'
     );
+
+    this.questionsGateway.broadcast('asnwearVoted', {
+      questionId: data.answearId,
+      vote: result
+    });
+  
+    return result;
   }
 
   @MessagePattern({ cmd: 'get_user_by_email' })

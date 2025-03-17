@@ -1,6 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { Transport } from '@nestjs/microservices';
+import { WsAdapter } from '@nestjs/platform-ws';
 
 async function bootstrap() {
 const app = await NestFactory.createMicroservice(AppModule, {
@@ -10,6 +11,10 @@ const app = await NestFactory.createMicroservice(AppModule, {
     port: 3000, // Choose a port for the app service
   },
 });
+
+// Configure WebSocket
+app.useWebSocketAdapter(new WsAdapter(app));
+
 app.listen();
 }
 bootstrap();

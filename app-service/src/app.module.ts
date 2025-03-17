@@ -4,6 +4,7 @@ import { ClientsModule, Transport } from '@nestjs/microservices';
 import { APP_FILTER } from '@nestjs/core';
 import { AllExceptionsFilter } from './filters/exception.filter';
 import { AppService } from './app.service';
+import { QuestionsGateway } from './gateway/questions.gateway';
 
 
 @Module({
@@ -13,8 +14,8 @@ import { AppService } from './app.service';
         name: 'USER_SERVICE',
         transport: Transport.TCP,
         options: {
-          host: 'user-service', // Use the service name from docker-compose 
-          // host: 'localhost', //locally
+          // host: 'user-service', // Use the service name from docker-compose 
+          host: 'localhost', //locally
           port: 3001,
         },
       },
@@ -22,8 +23,8 @@ import { AppService } from './app.service';
         name: 'QUESTION_SERVICE',
         transport: Transport.TCP,
         options: {
-          host: 'question-service', // Use the service name from docker-compose
-          // host: 'localhost', //locally
+          // host: 'question-service', // Use the service name from docker-compose
+          host: 'localhost', //locally
           port: 3002,
         },
       },
@@ -35,7 +36,8 @@ import { AppService } from './app.service';
       provide: APP_FILTER, // Provide APP_FILTER
       useClass: AllExceptionsFilter, // Use AllExceptionsFilter
     },
-    AppService
+    AppService,
+    QuestionsGateway
   ],
 })
 export class AppModule { }
