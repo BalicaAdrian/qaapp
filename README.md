@@ -62,7 +62,7 @@ The services we can use from AWS in order to make a deploy:
 - AWS CodeBuild - build teh docker image also push it to ECR
 - AWS CodeDeploy - taking care of deploy andcan  create task in order to make possible green/blue deployment
 
-## Developtment flow.
+## Developtment flow
     1. Push Code to GitHub which will trigger AWS CodePipeplin
     2. CodeBuild create new docker image and push to ECR
     3. CodeDeploy creates task in ECS Clusters in order to make a green environment and also trigger ALB - application load ballancer to route trafic based on patern(canary/linear)
