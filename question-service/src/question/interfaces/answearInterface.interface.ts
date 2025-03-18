@@ -6,5 +6,5 @@ export interface AnswerInterface {
     createdAt: Date;
     updatedAt: Date;
     nrOfPositiveVotes?: number;
-    nrOfnegativeVotes?: number;
+    nrOfNegativeVotes?: number;
   }

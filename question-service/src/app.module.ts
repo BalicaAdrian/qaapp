@@ -10,19 +10,11 @@ import { VoteController } from './vote/vote.controller';
 import { VoteModule } from './vote/vote.module';
 import { MetricsController } from './metrics/metrics.controller';
 import { MetricsModule } from './metrics/metrics.module';
+import { dataSourceOptions } from './typeorm.config';
 
 @Module({
 imports: [
-  TypeOrmModule.forRoot({
-    type: 'mysql',
-    host: process.env.DB_HOST || 'localhost', // Use environment variables
-    port: process.env.DB_PORT ? +process.env.DB_PORT : 3310,
-    username: process.env.DB_USER || 'root',
-    password: process.env.DB_PASSWORD || 'password',
-    database: process.env.DB_NAME || 'question_db',
-    entities: [__dirname + '/**/*.entity{.ts,.js}'], // Scan for entities
-    synchronize: true, // Auto-create schema in dev
-  }),
+  TypeOrmModule.forRoot(dataSourceOptions),
   QuestionModule,
   AnswerModule,
   VoteModule,

@@ -1,10 +1,9 @@
 import { BadRequestException, HttpStatus, Inject, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common'; import { ClientProxy } from '@nestjs/microservices';
 import { firstValueFrom } from 'rxjs';
-import { OauthUserInterface } from './dtos/oAuthUserInterface.interface';
+// import { OauthUserInterface } from './dtos/oAuthUserInterface.interface';
 import { RegisterDto } from './dtos/registerDto.dto';
-import * as bcrypt from 'bcrypt';
+import * as bcrypt from 'bcryptjs';
 import * as jwt from 'jsonwebtoken';
-
 import { LoginDto } from './dtos/loginDto';
 
 
@@ -17,25 +16,23 @@ export class AuthService {
 
     async register(registerDto: RegisterDto) {
         const { email, password, name } = registerDto;
-        console.log("dwadaw");
 
         const result = await firstValueFrom(
             this.appServiceClient.send({ cmd: 'get_user_by_email' }, { email }),
         );
-        console.log("result", result);
+       
         if (result.id) {
             throw new BadRequestException('User already exists');
         }
-        console.log("eaddcea")
+   
         const hashedPassword = await bcrypt.hash(password, 10);
-
+       
         const newUser = await firstValueFrom(
             this.appServiceClient.send({ cmd: 'create_user' }, { ...registerDto, password: hashedPassword }),
         );
-
-        console.log("user create ", newUser)
+    
         const secret = process.env.SECRET_JWT_KEY as string;
-        console.log("SECA", secret)
+
         const token = jwt.sign({ id: newUser.id }, secret, {});
 
         return {

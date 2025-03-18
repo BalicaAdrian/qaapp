@@ -17,12 +17,12 @@ updatedAt: Date;
 text: string;
 
 @Column()
-userId: string; // Foreign key to User
+userId: string; 
 
 @ManyToOne(() => Question, (question) => question.answears)
 @JoinColumn({ name: 'questionId' })
 question: Question;
 
-@OneToMany(() => Vote, (vote) => vote.answear) // Add this line
+@OneToMany(() => Vote, (vote) => vote.answear) 
 votes: Vote[];
 }

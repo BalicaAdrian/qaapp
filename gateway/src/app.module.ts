@@ -19,9 +19,8 @@ import { JwtModule } from '@nestjs/jwt';
         name: 'APP_SERVICE',
         transport: Transport.TCP,
         options: {
-          // host: 'app-service', //docker
-          host: 'localhost', //docker
-          port: 3000,
+          host: process.env.APP_SERVICE_HOST || "localhost", 
+          port: process.env.APP_SERVICE_PORT ? +process.env.APP_SERVICE_PORT : 3000,
         },
       },
     ]),

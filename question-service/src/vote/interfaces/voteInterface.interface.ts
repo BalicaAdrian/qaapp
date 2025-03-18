@@ -4,5 +4,5 @@ export interface VoteInterface {
     questionId?: string;
     answearId?: string;
     isUpVote: boolean;
-    createdAt: Date;
+    createdAt?: Date;
 }

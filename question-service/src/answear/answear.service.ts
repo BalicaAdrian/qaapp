@@ -5,7 +5,6 @@ import { Answear } from './answear.entity';
 import { RpcException } from '@nestjs/microservices';
 import { Question } from '../question/question.entity';
 import { AnswearInterface } from './interfaces/answearInterface.interface';
-import { CreateAnswerInterface } from './interfaces/createAnswearInterface.interface';
 
 @Injectable()
 export class AnswearService {

@@ -1,10 +1,10 @@
 import { Module } from '@nestjs/common';
 import { AuthController } from './authentification.controller';
 //import { GoogleStrategy } from 'src/authentification/strategies/google.strategy'; //google bug
-import { SessionSerializer } from './utils/serializer';
+// import { SessionSerializer } from './utils/serializer';
 import { AuthService } from './authenfitication.service';
 import { ClientsModule, Transport } from '@nestjs/microservices';
-import { ResponseFactory } from 'src/factories/responseFactory';
+import { ResponseFactory } from '../factories/responseFactory';
 
 
 @Module({
@@ -14,16 +14,15 @@ import { ResponseFactory } from 'src/factories/responseFactory';
                 name: 'APP_SERVICE',
                 transport: Transport.TCP,
                 options: {
-                    // host: 'app-service', //docker
-                    host: 'localhost', //docker
-                    port: 3000,
+                    host: process.env.APP_SERVICE_HOST || "localhost",
+                    port: process.env.APP_SERVICE_PORT ? +process.env.APP_SERVICE_PORT : 3000,
                 },
             },
         ]),],
     controllers: [AuthController],
     providers: [
         //GoogleStrategy, //google bug
-        SessionSerializer,
+        // SessionSerializer,
         AuthService,
         ResponseFactory
     ],

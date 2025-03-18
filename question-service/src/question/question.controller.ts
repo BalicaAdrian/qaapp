@@ -15,7 +15,6 @@ export class QuestionController {
 
   @MessagePattern({ cmd: 'create_question' })
   async createQuestion(data: QuestionInterface): Promise<QuestionInterface> {
-    console.log(data)
     return this.questionService.createQuestion(data);
   }
 

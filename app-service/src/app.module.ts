@@ -14,18 +14,16 @@ import { QuestionsGateway } from './gateway/questions.gateway';
         name: 'USER_SERVICE',
         transport: Transport.TCP,
         options: {
-          // host: 'user-service', // Use the service name from docker-compose 
-          host: 'localhost', //locally
-          port: 3001,
+          host: process.env.USER_SERVICE_HOST || "localhost",
+          port: process.env.USER_SERVICE_PORT ? +process.env.USER_SERVICE_PORT : 3001,
         },
       },
       {
         name: 'QUESTION_SERVICE',
         transport: Transport.TCP,
         options: {
-          // host: 'question-service', // Use the service name from docker-compose
-          host: 'localhost', //locally
-          port: 3002,
+          host: process.env.QUESTION_SERVICE_HOST || "localhost",
+          port: process.env.QUESTION_SERVICE_PORT ? +process.env.QUESTION_SERVICE_PORT : 3002,
         },
       },
     ])
@@ -33,8 +31,8 @@ import { QuestionsGateway } from './gateway/questions.gateway';
   controllers: [AppController],
   providers: [
     {
-      provide: APP_FILTER, // Provide APP_FILTER
-      useClass: AllExceptionsFilter, // Use AllExceptionsFilter
+      provide: APP_FILTER, 
+      useClass: AllExceptionsFilter, 
     },
     AppService,
     QuestionsGateway

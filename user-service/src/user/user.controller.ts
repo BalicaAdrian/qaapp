@@ -21,6 +21,7 @@ export class UserController {
 
   @MessagePattern({ cmd: 'create_user' })
   async createUser(data: UserInterface): Promise<UserInterface> {
+  
     return this.userService.createUser(data);
   }
 

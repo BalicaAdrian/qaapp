@@ -3,9 +3,9 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Question } from './question.entity';
 import { RpcException } from '@nestjs/microservices';
-import { Answear } from 'src/answear/answear.entity';
+import { Answear } from '../answear/answear.entity';
 import { QuestionInterface } from './interfaces/questionInterface.interface';
-import { Vote } from 'src/vote/vote.entity';
+import { Vote } from '../vote/vote.entity';
 import { NumberOfVotesInterface } from './interfaces/numberOfVotes.interface';
 
 @Injectable()
@@ -41,7 +41,7 @@ export class QuestionService {
         }),
       );
 
-      const response: QuestionInterface = { ...question, nrOfnegativeVotes: voteCount.nrOfNegativeVotes, nrOfPositiveVotes: voteCount.nrOfPositiveVotes, answears: answersWithVotes }
+      const response: QuestionInterface = { ...question, nrOfNegativeVotes: voteCount.nrOfNegativeVotes, nrOfPositiveVotes: voteCount.nrOfPositiveVotes, answears: answersWithVotes }
 
       return response;
     } catch (error) {
@@ -59,7 +59,7 @@ export class QuestionService {
     try {
       const questions = await this.questionRepository
         .createQueryBuilder('question')
-        .leftJoin('question.answears', 'answear') // Join and select answers
+        .leftJoin('question.answears', 'answear') 
         .select([
           'question.id',
           'question.content',
@@ -74,8 +74,7 @@ export class QuestionService {
         .orderBy('nrOfPositiveVotes', 'DESC')
         .getRawMany();
 
-
-      if (questions.length <= 0) {
+      if (!questions || questions.length <= 0) {
         throw new RpcException({ message: 'we have no questions', status: HttpStatus.NOT_FOUND });
       }
 
@@ -88,7 +87,7 @@ export class QuestionService {
         updatedAt: question.question_updatedAt,
         nrOfPositiveVotes: +question.nrOfPositiveVotes,
         nrOfNegativeVotes: +question.nrOfNegativeVotes,
-        nrOfAnswers: +question.nrOfAnswers, // Include the number of answers
+        nrOfAnswers: +question.nrOfAnswers, 
       }));
     } catch (error) {
       if (error instanceof RpcException) {
@@ -105,10 +104,9 @@ export class QuestionService {
     try {
       const newQuestion = this.questionRepository.create(data);
       const question = await this.questionRepository.save(newQuestion);
-      console.log("data", data, question)
       return question;
     } catch (error) {
-      console.error('Error in createQuestion:', error);
+      //console.error('Error in createQuestion:', error);
       throw new RpcException({ message: 'Failed to create question', status: HttpStatus.INTERNAL_SERVER_ERROR });
     }
   }
@@ -154,6 +152,9 @@ export class QuestionService {
         }, 'avg_user_questions')
         .getRawOne();
 
+
+      if (!result)
+        return 0;
 
       return +result.average;
 

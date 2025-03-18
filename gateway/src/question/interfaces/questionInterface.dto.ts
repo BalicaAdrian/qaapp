@@ -5,7 +5,7 @@ export interface QuestionInterface {
     content: string;
     userId: string;
     nrOfPositiveVotes?: number;
-    nrOfnegativeVotes?: number;
+    nrOfNegativeVotes?: number;
     answers?: AnswearInterface[];
     createdAt?: Date;
     updatedAt?: Date;

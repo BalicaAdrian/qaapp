@@ -11,10 +11,10 @@ export class Vote {
     createdAt: Date;
 
     @Column()
-    userId: string; // Foreign key to User
+    userId: string; 
 
     @Column({ default: true })
-    isUpVote: boolean; // True for upvote, false for downvote
+    isUpVote: boolean;
 
     @ManyToOne(() => Question, (question) => question.votes)
     @JoinColumn({ name: 'questionId' })

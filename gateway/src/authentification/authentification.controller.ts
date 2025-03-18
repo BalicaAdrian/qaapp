@@ -2,8 +2,9 @@ import { Body, Controller, Get, Inject, Post, Put, Query, Req, Res, UseGuards } 
 // import { OAuth2Client } from 'google-auth-library';
 import { AuthService } from './authenfitication.service';
 import { RegisterDto } from './dtos/registerDto.dto';
-import { ResponseFactory } from 'src/factories/responseFactory';
+import { ResponseFactory } from '../factories/responseFactory';
 import { LoginDto } from './dtos/loginDto';
+import { ApiBody, ApiOperation } from '@nestjs/swagger';
 
 @Controller('auth')
 export class AuthController {
@@ -22,6 +23,23 @@ export class AuthController {
 
 
   @Post('register')
+  @ApiOperation({
+    summary: 'Register a new user',
+    description: 'Creates a new user account with the provided credentials'
+  })
+  @ApiBody({
+    type: RegisterDto,
+    description: 'User registration credentials',
+    examples: {
+      userExample: {
+        value: {
+          email: 'adriancbalica@gmail.com',
+          password: 'passsowrd16441',
+          name: 'Adrian Balica'
+        }
+      }
+    }
+  })
   public async register(
     @Body() body: RegisterDto,
     @Res() response: Response
@@ -31,10 +49,28 @@ export class AuthController {
 
       return this.responseFactory.handleResponse(result, response);
     } catch (e) {
+      console.log(e);
       return this.responseFactory.handleResponse({ message: e.message, status: e.status, error: e }, response);
     }
   }
 
+  @Post('login')
+  @ApiOperation({
+    summary: 'User login',
+    description: 'Authenticates a user and returns a JWT token'
+  })
+  @ApiBody({
+    type: LoginDto,
+    description: 'User login credentials',
+    examples: {
+      userLogin: {
+        value: {
+          email: 'adriancbalica@gmail.com',
+          password: 'parola314351413'
+        }
+      }
+    }
+  })
   @Post('login')
   public async login(
     @Body() body: LoginDto,

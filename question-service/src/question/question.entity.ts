@@ -1,7 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany, CreateDateColumn, UpdateDateColumn } from 'typeorm';
-
 import { Vote } from '../vote/vote.entity';
-import { Answear } from 'src/answear/answear.entity';
+import { Answear } from '../answear/answear.entity';
 
 @Entity()
 export class Question {
@@ -18,7 +17,7 @@ export class Question {
     content: string;
 
     @Column()
-    userId: string; // Foreign key to User
+    userId: string;
 
     @OneToMany(() => Answear, (answear) => answear.question, { cascade: true })
     answears: Answear[];

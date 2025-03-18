@@ -69,6 +69,7 @@ export class UserService {
   async createUser(data: UserInterface): Promise<UserInterface> {
     try {
       const newUser = this.userRepository.save(data);
+     
       return newUser;
     } catch (error) {
       console.error('Error in createUser:', error);

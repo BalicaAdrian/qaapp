@@ -28,7 +28,7 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, config);
 
 
-  // app.useGlobalPipes(new ValidationPipe()); // Add ValidationPipe
+  // app.useGlobalPipes(new ValidationPipe());
   SwaggerModule.setup('api', app, document);
 
   //google bug
@@ -44,6 +44,6 @@ async function bootstrap() {
   // );
   // app.use(passport.initialize());
   // app.use(passport.session());
-  await app.listen(8080); // Gateway listens on port 8080
+  await app.listen(8080); 
 }
 bootstrap();

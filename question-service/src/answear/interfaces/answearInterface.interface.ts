@@ -7,7 +7,7 @@ export interface AnswearInterface {
     question?: QuestionInterface;
     questionId?: string,
     userId?: string;
-    createdAt: Date;
-    updatedAt: Date;
+    createdAt?: Date;
+    updatedAt?: Date;
     votes?: VoteInterface[];
 }

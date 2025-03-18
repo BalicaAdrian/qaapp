@@ -9,7 +9,7 @@ async function bootstrap() {
     transport: Transport.TCP,
     options: {
       host: '0.0.0.0',
-      port: 3002, // Choose a different port for the question service
+      port: process.env.QUESTION_SERVICE_PORT ? +process.env.QUESTION_SERVICE_PORT : 3002,
     },
   });
   app.listen();

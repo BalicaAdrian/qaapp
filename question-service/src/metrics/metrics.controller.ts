@@ -17,13 +17,23 @@ export class MetricsController {
     @MessagePattern({ cmd: 'get_question_metrics' })
     async getQuestionMetrics(): Promise<MetricsInterface> {
 
-        const totalNrQuestions = await this.questionService.getTotalNrQuestions();
-        const totalNrAnswears = await this.answearSerivce.getTotalNrAnswears();
-        const totalNrVotes = await this.voteService.getTotalNrvotes();
-        const avgVotesPerUser = await this.voteService.getAvgVotesPerUser();
-        const avgAnswearsPerUser = await this.questionService.getAvgQuestionPerUser();
-        const avgQuestionsPerUser = await this.answearSerivce.getAvgAnswearPerUser();
-        const mostPopularDayOfTheWeekBasedOnVotes = await this.voteService.getMostPopularDayOfWeek();
+        const [
+            totalNrQuestions,
+            totalNrAnswears,
+            totalNrVotes,
+            avgVotesPerUser,
+            avgAnswearsPerUser,
+            avgQuestionsPerUser,
+            mostPopularDayOfTheWeekBasedOnVotes
+        ] = await Promise.all([
+            this.questionService.getTotalNrQuestions(),
+            this.answearSerivce.getTotalNrAnswears(),
+            this.voteService.getTotalNrvotes(),
+            this.voteService.getAvgVotesPerUser(),
+            this.questionService.getAvgQuestionPerUser(),
+            this.answearSerivce.getAvgAnswearPerUser(),
+            this.voteService.getMostPopularDayOfWeek()
+        ]);
         
         const result: MetricsInterface = {
             totalNrAnswears,
